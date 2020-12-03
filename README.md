@@ -1,3 +1,10 @@
+Want to help out? 
+Need tech-support?
+Join our discord at https://discord.com/invite/XFbWSjMHJh
+
+Demo Video:
+https://www.youtube.com/watch?v=AdLwcU03230
+
 ### Requirements: 
 - User Interface:
   - ElectronJS 
@@ -16,7 +23,7 @@
   - python-dotenv
 
 - NodeJS server:
-  - npm install
+  - "npm install"
 
 - Tesseract-OCR 5:
   - Download from https://digi.bib.uni-mannheim.de/tesseract/?C=M;O=A
@@ -24,7 +31,7 @@
   - For Japanese language, choose https://github.com/tesseract-ocr/tessdata_best/blob/master/jpn.traineddata
   - Drag jpn.traineddata to Tesseract-OCR/tessdata
   - Go to backendServer/node-tesseract-ocr.js and update Tesseract-OCR's directory
-  - For Window environment, I would the whole folder inside /backendServer
+  - For Window environment, I would the whole folder inside backendServer/
 
 ### Activation: 
 - ElectronJS (npm start)
@@ -35,4 +42,4 @@ Note: Window developers can click on Visual Novel OCR.bat to open all three comm
 
 ### Build: 
 - User Interface:
-  - npm package 
+  - "npm package" 
