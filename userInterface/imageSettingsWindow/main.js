@@ -234,6 +234,13 @@ class CollectionOfSliders {
                 }
             },
             {
+                element: "saturationMaxSlider",
+                value: "saturationMaxSlider",
+                onValueUpdate: (sliderValue) => {
+                    editedImage.updateSaturationMaxValue(parseInt(sliderValue))
+                }
+            },
+            {
                 element: "valueMaxSlider",
                 value: "valueMaxValue",
                 onValueUpdate: (sliderValue) => {
