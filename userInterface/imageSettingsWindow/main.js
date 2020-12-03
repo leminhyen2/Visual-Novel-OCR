@@ -191,7 +191,7 @@ class Slider {
         this.sliderValueElement.innerHTML = this.getValue()
 
         this.sliderElement.oninput = () => {
-            let sliderValue = this.hueMaxSlider.getValue()
+            let sliderValue = this.getValue()
             this.sliderValueElement.innerHTML = sliderValue
             this.onValueUpdate(sliderValue)
         }
