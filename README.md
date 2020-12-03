@@ -1,7 +1,8 @@
 The source code for Visual Novel OCR
 
 Requirements: 
--ElectronJS
--Python
--Nodejs
--Tesseract-OCR
+
+-ElectronJS (for userInterface)
+-Python (for backendServer)
+-Nodejs (for backendServer)
+-Tesseract-OCR (for backendServer)
