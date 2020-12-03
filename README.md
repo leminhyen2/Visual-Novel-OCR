@@ -7,7 +7,7 @@ Requirements:
     - Tesseract-OCR 5
 
 Installation:
-  - Tesseract 5:
+  - Tesseract-OCR 5:
     - Download from https://digi.bib.uni-mannheim.de/tesseract/?C=M;O=A
     - Download best pre-trained models from https://github.com/tesseract-ocr/tessdata_best
     - For Japanese language, choose https://github.com/tesseract-ocr/tessdata_best/blob/master/jpn.traineddata
