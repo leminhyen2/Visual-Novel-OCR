@@ -1,6 +1,3 @@
-The source code for Visual Novel OCR
-
-
 Requirements: 
   - User Interface:
     - ElectronJS 
