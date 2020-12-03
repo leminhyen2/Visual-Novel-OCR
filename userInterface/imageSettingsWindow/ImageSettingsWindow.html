@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="imageSettingsWindow.css" />
+
+<!-- <script async src="opencv.js" onload="onOpenCvReady();" type="text/javascript"></script> -->
+
+</head>
+<body>
+    <div class="slidecontainer container">
+        <div id="sliderLabel">
+            <h3>Image Color Settings (usually, saturationMax or BrightnessMax would do)
+            </h3>
+        </div>
+
+        <div class="sliderContainer">
+            <p class="sliderLabel">Saturation max: <span id="saturationMaxValue"></span></p>
+            <input type="range" min="0" max="255" value="255" class="slider" id="saturationMaxSlider">
+        </div>
+    
+        <div class="sliderContainer">
+            <p class="sliderLabel">Brightness max: <span id="valueMaxValue"></span></p>
+            <input type="range" min="0" max="255" value="255" class="slider" id="valueMaxSlider">
+        </div>
+
+        <div class="sliderContainer">
+            <p class="sliderLabel">Color value max: <span id="hueMaxValue"></span></p>
+            <input type="range" min="0" max="179" value="179" class="slider" id="hueMaxSlider">
+        </div>
+    
+        <div class="sliderContainer">
+            <p class="sliderLabel">Saturation min: <span id="saturationMinValue"></span></p>
+            <input type="range" min="0" max="255" value="0" class="slider" id="saturationMinSlider">
+        </div>
+    
+        <div class="sliderContainer">
+            <p class="sliderLabel">Brightness min: <span id="valueMinValue"></span></p>
+            <input type="range" min="0" max="255" value="0" class="slider" id="valueMinSlider">
+        </div>
+
+        <div class="sliderContainer">
+            <p class="sliderLabel">Color value min: <span id="hueMinValue"></span></p>
+            <input type="range" min="0" max="179" value="0" class="slider" id="hueMinSlider">
+        </div>
+    
+    </div>
+    
+    <div class="slidecontainer container">
+        <div class="sliderLabel">
+            <h3>Binarize Image (usually default is good enough)</h3>
+        </div>
+    
+        <div class="sliderContainer">
+            <p class="sliderLabel">Invert Binarize Value: <span id="binarizedValue"></span></p>
+            <input type="range" min="0" max="255" value="1" class="slider" id="binarizedSlider">
+        </div>
+    </div>
+
+    <div class="container">
+        <div>
+            <h3 class="caption">Finalized Image (black or colored text on white background)</h3>
+            <div class="inputoutput container">
+                <canvas id="finalizedCanvasOutput" ></canvas>
+            </div>
+
+            <h3 class="caption">Display Images (use ColorValue MinMax as last resort. Also, sometimes 2 attributes are better than 1)</h3>
+            <div class="inputoutput container">
+                <canvas id="canvasOutput" ></canvas>
+            </div>
+    
+            <h3 class="caption"></h3>
+            <div class="inputoutput container">
+                <img id="imageSrc" alt="No Image" />
+            </div>
+        </div>
+    </div>
+
+<script src="./bundle.js"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{
+  "name": "tesseracttest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.20.0",
+    "base64-img": "^1.0.4",
+    "body-parser": "^1.18.3",
+    "clipboardy": "^2.3.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.0.0",
+    "express": "^4.16.3",
+    "form-data": "^3.0.0",
+    "iohook": "^0.6.6",
+    "node-fetch": "^2.6.1",
+    "node-tesseract-ocr": "^2.0.0",
+    "open": "^7.2.0",
+    "request": "^2.88.2",
+    "ws": "^7.4.0"
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "_from": "node-tesseract-ocr",
+  "_id": "node-tesseract-ocr@2.0.0",
+  "_inBundle": false,
+  "_integrity": "sha512-NU2D6MpH6DSpv01ZrmCqMsbG/sPLq3WMOL7dJAP8D00djSrqnin96Vhu1uaf5/tiqXLEMe1Yiv69Uf0R/f0Dug==",
+  "_location": "/node-tesseract-ocr",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "node-tesseract-ocr",
+    "name": "node-tesseract-ocr",
+    "escapedName": "node-tesseract-ocr",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/node-tesseract-ocr/-/node-tesseract-ocr-2.0.0.tgz",
+  "_shasum": "d13089e4c9e6ceaf2fde93efc2f0fd1da5225ea6",
+  "_spec": "node-tesseract-ocr",
+  "_where": "/home/minh/Desktop/tesseractTest",
+  "bugs": {
+    "url": "https://github.com/zapolnoch/node-tesseract-ocr/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "A Node.js wrapper for the Tesseract OCR API",
+  "devDependencies": {
+    "eslint": "^7.1.0",
+    "eslint-config-silence": "^0.7.1",
+    "eslint-plugin-prettier": "^3.1.3",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.0.5",
+    "rewire": "^5.0.0",
+    "tape": "^5.0.1"
+  },
+  "engines": {
+    "node": ">=10"
+  },
+  "homepage": "https://github.com/zapolnoch/node-tesseract-ocr#readme",
+  "keywords": [
+    "ocr",
+    "tesseract",
+    "text recognition",
+    "optical character recognition",
+    "image to text"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "node-tesseract-ocr",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/zapolnoch/node-tesseract-ocr.git"
+  },
+  "scripts": {
+    "test": "npm-run-all test:*",
+    "test:audit": "npm audit --audit-level=high",
+    "test:e2e": "tape test/e2e.js",
+    "test:lint": "eslint .",
+    "test:unit": "tape test/unit.js"
+  },
+  "version": "2.0.0"
+}
