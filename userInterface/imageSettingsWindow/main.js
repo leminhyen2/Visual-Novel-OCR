@@ -13,7 +13,7 @@ class ServerConnection {
             },
             body: JSON.stringify({content: thisContent, message: thisMessage})
         })
-        
+
         const textData = await response.json()
 
         console.log(textData)
@@ -164,7 +164,7 @@ class EditedImage {
         cv.imshow('canvasOutput', output)
 
         let binarizedOutput = new cv.Mat()
-        cv.threshold(output, binarizedOutput, this.binarizedValue, 255, cv.THRESH_BINARY_INV); 
+        cv.threshold(output, binarizedOutput, this.binarizedValue, 255, cv.THRESH_BINARY_INV);
         cv.imshow('finalizedCanvasOutput', binarizedOutput)
 
         image.delete()
@@ -181,113 +181,94 @@ class EditedImage {
 let editedImage = new EditedImage()
 
 class Slider {
-    constructor(receivedSliderElement, receivedSliderValueElement) {
-        this.sliderElement = receivedSliderElement 
+    constructor(receivedSliderElement, receivedSliderValueElement, { onValueUpdate = (sliderValue) => {}}) {
+        this.sliderElement = receivedSliderElement
         this.sliderValueElement = receivedSliderValueElement
+        this.onValueUpdate = onValueUpdate
+    }
+
+    listen () {
+        this.sliderValueElement.innerHTML = this.getValue()
+
+        this.sliderElement.oninput = () => {
+            let sliderValue = this.getValue()
+            this.sliderValueElement.innerHTML = sliderValue
+            this.onValueUpdate(sliderValue)
+        }
     }
 
     getValue() {
-        return this.sliderElement.value 
+        return this.sliderElement.value
     }
 }
 
 class CollectionOfSliders {
     constructor () {
-        this.hueMinSlider = new Slider(document.getElementById("hueMinSlider"), document.getElementById("hueMinValue"))
-        this.saturationMinSlider = new Slider(document.getElementById("saturationMinSlider"), document.getElementById("saturationMinValue"))
-        this.valueMinSlider = new Slider(document.getElementById("valueMinSlider"), document.getElementById("valueMinValue"))
-        this.hueMaxSlider = new Slider(document.getElementById("hueMaxSlider"), document.getElementById("hueMaxValue"))
-        this.saturationMaxSlider = new Slider(document.getElementById("saturationMaxSlider"), document.getElementById("saturationMaxValue"))
-        this.valueMaxSlider = new Slider(document.getElementById("valueMaxSlider"), document.getElementById("valueMaxValue"))
+        const sliders = [
+            {
+                element: "hueMinSlider",
+                value: "hueMinValue",
+                onValueUpdate: (sliderValue) => {
+                    editedImage.updateHueMinValue(parseInt(sliderValue))
+                }
+            },
+            {
+                element: "saturationMinSlider",
+                value: "saturationMinValue",
+                onValueUpdate: (sliderValue) => {
+                    editedImage.updateSaturationMinValue(parseInt(sliderValue))
+                }
+            },
+            {
+                element: "valueMinSlider",
+                value: "valueMinValue",
+                onValueUpdate: (sliderValue) => {
+                    editedImage.updateValueMinValue(parseInt(sliderValue))
+                }
+            },
+            {
+                element: "hueMaxSlider",
+                value: "hueMaxValue",
+                onValueUpdate: (sliderValue) => {
+                    editedImage.updateHueMaxValue(parseInt(sliderValue))
+                }
+            },
+            {
+                element: "saturationMaxSlider",
+                value: "saturationMaxValue",
+                onValueUpdate: (sliderValue) => {
+                    editedImage.updateSaturationMaxValue(parseInt(sliderValue))
+                }
+            },
+            {
+                element: "valueMaxSlider",
+                value: "valueMaxValue",
+                onValueUpdate: (sliderValue) => {
+                    editedImage.updateValueMaxValue(parseInt(sliderValue))
+                }
+            },
+            {
+                element: "binarizedSlider",
+                value: "binarizedValue",
+                onValueUpdate: (sliderValue) => {
+                    editedImage.updateBinarizedValue(parseInt(sliderValue))
+                }
+            }
+        ]
 
-        this.binarizedSlider = new Slider(document.getElementById("binarizedSlider"), document.getElementById("binarizedValue"))
-
+        this.sliderInstances = sliders.map(this.initSlider)
     }
 
-    hueMinSliderListen() {
-        this.hueMinSlider.sliderValueElement.innerHTML = this.hueMinSlider.getValue()
-
-        this.hueMinSlider.sliderElement.oninput = () => {
-            let sliderValue = this.hueMinSlider.getValue()
-            this.hueMinSlider.sliderValueElement.innerHTML = sliderValue
-            editedImage.updateHueMinValue(parseInt(sliderValue))
-        }
-    }
-
-    saturationMinSliderListen() {
-        this.saturationMinSlider.sliderValueElement.innerHTML = this.saturationMinSlider.getValue()
-
-        this.saturationMinSlider.sliderElement.oninput = () => {
-            let sliderValue = this.saturationMinSlider.getValue()
-            this.saturationMinSlider.sliderValueElement.innerHTML = sliderValue
-            editedImage.updateSaturationMinValue(parseInt(sliderValue))
-        }
-    }
-    
-
-    valueMinSliderListen() {
-        this.valueMinSlider.sliderValueElement.innerHTML = this.valueMinSlider.getValue()
-
-        this.valueMinSlider.sliderElement.oninput = () => {
-            let sliderValue = this.valueMinSlider.getValue()
-            this.valueMinSlider.sliderValueElement.innerHTML = sliderValue
-            editedImage.updateValueMinValue(parseInt(sliderValue))
-        }
-    }
-
-    hueMaxSliderListen() {
-        this.hueMaxSlider.sliderValueElement.innerHTML = this.hueMaxSlider.getValue()
-
-        this.hueMaxSlider.sliderElement.oninput = () => {
-            let sliderValue = this.hueMaxSlider.getValue()
-            this.hueMaxSlider.sliderValueElement.innerHTML = sliderValue
-            editedImage.updateHueMaxValue(parseInt(sliderValue))
-        }
-    }
-
-    saturationMaxSliderListen() {
-        this.saturationMaxSlider.sliderValueElement.innerHTML = this.saturationMaxSlider.getValue()
-
-        this.saturationMaxSlider.sliderElement.oninput = () => {
-            let sliderValue = this.saturationMaxSlider.getValue()
-            this.saturationMaxSlider.sliderValueElement.innerHTML = sliderValue
-            editedImage.updateSaturationMaxValue(parseInt(sliderValue))
-        }
-    }
-
-    valueMaxSliderListen() {
-        this.valueMaxSlider.sliderValueElement.innerHTML = this.valueMaxSlider.getValue()
-
-        this.valueMaxSlider.sliderElement.oninput = () => {
-            let sliderValue = this.valueMaxSlider.getValue()
-            this.valueMaxSlider.sliderValueElement.innerHTML = sliderValue
-            editedImage.updateValueMaxValue(parseInt(sliderValue))
-        }
-    }
-
-    binarizedSliderListen() {
-        this.binarizedSlider.sliderValueElement.innerHTML = this.binarizedSlider.getValue()
-
-        this.binarizedSlider.sliderElement.oninput = () => {
-            let sliderValue = this.binarizedSlider.getValue()
-            this.binarizedSlider.sliderValueElement.innerHTML = sliderValue
-            editedImage.updateBinarizedValue(parseInt(sliderValue))
-        }
+    initSlider ({ element, value, onValueUpdate }) {
+        return new Slider(document.getElementById(element), document.getElementById(value), { onValueUpdate });
     }
 
     listen() {
-        this.hueMinSliderListen()
-        this.saturationMinSliderListen()
-        this.valueMinSliderListen()
-        this.hueMaxSliderListen()
-        this.saturationMaxSliderListen()
-        this.valueMaxSliderListen()
-
-        this.binarizedSliderListen()
-
+        this.sliderInstances.forEach((sliderInstance) => {
+            sliderInstance.listen()
+        })
     }
 }
-
 
 let collectionOfSliders = new CollectionOfSliders()
 collectionOfSliders.listen()
