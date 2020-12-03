@@ -23,6 +23,8 @@
   - Download best pre-trained models from https://github.com/tesseract-ocr/tessdata_best
   - For Japanese language, choose https://github.com/tesseract-ocr/tessdata_best/blob/master/jpn.traineddata
   - Drag jpn.traineddata to Tesseract-OCR/tessdata
+  - Go to backendServer/node-tesseract-ocr.js and update Tesseract-OCR's directory
+  - For Window environment, I would the whole folder inside /backendServer
 
 ### Activation: 
 - ElectronJS (npm start)
