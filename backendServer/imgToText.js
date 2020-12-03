@@ -1,4 +1,4 @@
- const tesseract = require("./node-tesseract-ocr")
+ const tesseract = require("./node-tesseract-ocr.js")
 
 module.exports =  async function (imageFile) {
     const config = {
