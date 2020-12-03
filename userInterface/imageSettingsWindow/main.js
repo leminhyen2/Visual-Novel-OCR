@@ -235,7 +235,7 @@ class CollectionOfSliders {
             },
             {
                 element: "saturationMaxSlider",
-                value: "saturationMaxSlider",
+                value: "saturationMaxValue",
                 onValueUpdate: (sliderValue) => {
                     editedImage.updateSaturationMaxValue(parseInt(sliderValue))
                 }
