@@ -1,4 +1,5 @@
 const cv = require("./opencv.js")
+const IMAGE_PRESETS = require('./imagePresets.json')
 
 class ServerConnection {
     constructor() {
@@ -181,7 +182,8 @@ class EditedImage {
 let editedImage = new EditedImage()
 
 class Slider {
-    constructor(receivedSliderElement, receivedSliderValueElement, { onValueUpdate = (sliderValue) => {}}) {
+    constructor(id, receivedSliderElement, receivedSliderValueElement, { onValueUpdate = (sliderValue) => {}}) {
+        this.id = id
         this.sliderElement = receivedSliderElement
         this.sliderValueElement = receivedSliderValueElement
         this.onValueUpdate = onValueUpdate
@@ -197,15 +199,36 @@ class Slider {
         }
     }
 
+    updateValue(value) {
+        this.sliderElement.value = value
+        this.sliderValueElement.innerHTML = value
+        this.onValueUpdate(value)
+    }
+
     getValue() {
         return this.sliderElement.value
     }
+
+    getId () {
+        return this.id
+    }
+}
+
+const SLIDER_IDS = {
+    HUE_MIN: "hueMin",
+    SATURATION_MIN: "saturationMin",
+    VALUE_MIN: "valueMin",
+    HUE_MAX: "hueMax",
+    SATURATION_MAX: "saturationMax",
+    VALUE_MAX: "valueMax",
+    BINARIZED: "binarized"
 }
 
 class CollectionOfSliders {
     constructor () {
         const sliders = [
             {
+                id: SLIDER_IDS.HUE_MIN,
                 element: "hueMinSlider",
                 value: "hueMinValue",
                 onValueUpdate: (sliderValue) => {
@@ -213,6 +236,7 @@ class CollectionOfSliders {
                 }
             },
             {
+                id: SLIDER_IDS.SATURATION_MIN,
                 element: "saturationMinSlider",
                 value: "saturationMinValue",
                 onValueUpdate: (sliderValue) => {
@@ -220,6 +244,7 @@ class CollectionOfSliders {
                 }
             },
             {
+                id: SLIDER_IDS.VALUE_MIN,
                 element: "valueMinSlider",
                 value: "valueMinValue",
                 onValueUpdate: (sliderValue) => {
@@ -227,6 +252,7 @@ class CollectionOfSliders {
                 }
             },
             {
+                id: SLIDER_IDS.HUE_MAX,
                 element: "hueMaxSlider",
                 value: "hueMaxValue",
                 onValueUpdate: (sliderValue) => {
@@ -234,6 +260,7 @@ class CollectionOfSliders {
                 }
             },
             {
+                id: SLIDER_IDS.SATURATION_MAX,
                 element: "saturationMaxSlider",
                 value: "saturationMaxValue",
                 onValueUpdate: (sliderValue) => {
@@ -241,6 +268,7 @@ class CollectionOfSliders {
                 }
             },
             {
+                id: SLIDER_IDS.VALUE_MAX,
                 element: "valueMaxSlider",
                 value: "valueMaxValue",
                 onValueUpdate: (sliderValue) => {
@@ -248,6 +276,7 @@ class CollectionOfSliders {
                 }
             },
             {
+                id: SLIDER_IDS.BINARIZED,
                 element: "binarizedSlider",
                 value: "binarizedValue",
                 onValueUpdate: (sliderValue) => {
@@ -259,8 +288,8 @@ class CollectionOfSliders {
         this.sliderInstances = sliders.map(this.initSlider)
     }
 
-    initSlider ({ element, value, onValueUpdate }) {
-        return new Slider(document.getElementById(element), document.getElementById(value), { onValueUpdate });
+    initSlider ({ id, element, value, onValueUpdate }) {
+        return new Slider(id, document.getElementById(element), document.getElementById(value), { onValueUpdate });
     }
 
     listen() {
@@ -268,7 +297,58 @@ class CollectionOfSliders {
             sliderInstance.listen()
         })
     }
+
+    getSliderInstances() {
+        return this.sliderInstances
+    }
 }
 
 let collectionOfSliders = new CollectionOfSliders()
 collectionOfSliders.listen()
+
+// Image preset selector
+const imagePresetSelect = document.getElementById("image-presets")
+
+Object.keys(IMAGE_PRESETS).forEach((presetId) => {
+    const preset = IMAGE_PRESETS[presetId]
+    const option = document.createElement("option")
+    option.text = preset.desc
+    option.value = presetId
+    imagePresetSelect.add(option)
+})
+
+// Handle switching the values of a selected preset
+imagePresetSelect.addEventListener('change', (evt) => {
+    const presetId = evt.target.value
+    const preset = IMAGE_PRESETS[presetId]
+
+    collectionOfSliders.getSliderInstances().forEach((sliderInstance) => {
+        const id = sliderInstance.getId()
+
+        switch (id) {
+            case SLIDER_IDS.VALUE_MAX:
+                sliderInstance.updateValue(preset.valueMaxValue)
+                break
+            case SLIDER_IDS.HUE_MAX:
+                sliderInstance.updateValue(preset.hueMaxValue)
+                break
+            case SLIDER_IDS.SATURATION_MAX:
+                sliderInstance.updateValue(preset.saturationMaxValue)
+                break
+            case SLIDER_IDS.VALUE_MIN:
+                sliderInstance.updateValue(preset.valueMinValue)
+                break
+            case SLIDER_IDS.HUE_MIN:
+                sliderInstance.updateValue(preset.hueMinValue)
+                break
+            case SLIDER_IDS.VALUE_MIN:
+                sliderInstance.updateValue(preset.valueMinValue)
+                break
+            case SLIDER_IDS.BINARIZED:
+                sliderInstance.updateValue(preset.binarizedValue)
+                break
+            default:
+                console.warn(`Image preset not handled: ${id}`)
+        }
+    })
+})
