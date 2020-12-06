@@ -52,3 +52,7 @@ img {
 .sliderLabel {
     margin-top: 0;
 }
+
+#image-presets {
+  margin-bottom: 7px;
+}

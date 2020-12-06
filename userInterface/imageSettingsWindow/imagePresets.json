@@ -1,0 +1,72 @@
+{
+  "no_preset": {
+    "desc": "Default",
+    "saturationMaxValue": 255,
+    "valueMaxValue": 255,
+    "hueMaxValue": 179,
+    "saturationMinValue": 0,
+    "valueMinValue": 0,
+    "hueMinValue": 0,
+    "binarizedValue": 1
+  },
+  "black_on_light_blue": {
+    "desc": "Black text on light blue bg",
+    "saturationMaxValue": 255,
+    "valueMaxValue": 255,
+    "hueMaxValue": 179,
+    "saturationMinValue": 0,
+    "valueMinValue": 0,
+    "hueMinValue": 0,
+    "binarizedValue": 0
+  },
+  "green_on_pink": {
+    "desc": "Green text on pink bg",
+    "saturationMaxValue": 255,
+    "valueMaxValue": 255,
+    "hueMaxValue": 179,
+    "saturationMinValue": 175,
+    "valueMinValue": 162,
+    "hueMinValue": 0,
+    "binarizedValue": 97
+  },
+  "orange_on_light_blue": {
+    "desc": "Orange text on light blue bg",
+    "saturationMaxValue": 255,
+    "valueMaxValue": 243,
+    "hueMaxValue": 88,
+    "saturationMinValue": 0,
+    "valueMinValue": 0,
+    "hueMinValue": 0,
+    "binarizedValue": 0
+  },
+  "stained_white_on_dark": {
+    "desc": "Stained white text on dark bg",
+    "saturationMaxValue": 62,
+    "valueMaxValue": 255,
+    "hueMaxValue": 179,
+    "saturationMinValue": 0,
+    "valueMinValue": 140,
+    "hueMinValue": 0,
+    "binarizedValue": 0
+  },
+  "white_on_black": {
+    "desc": "White text on black bg",
+    "saturationMaxValue": 255,
+    "valueMaxValue": 255,
+    "hueMaxValue": 179,
+    "saturationMinValue": 0,
+    "valueMinValue": 141,
+    "hueMinValue": 0,
+    "binarizedValue": 1
+  },
+  "white_on_transparent": {
+    "desc": "White text on transparent bg",
+    "saturationMaxValue": 255,
+    "valueMaxValue": 255,
+    "hueMaxValue": 179,
+    "saturationMinValue": 0,
+    "valueMinValue": 242,
+    "hueMinValue": 0,
+    "binarizedValue": 1
+  }
+}
