@@ -4,7 +4,7 @@ import mss.tools
 def takeScreenshot(top, left, width, height):
     with mss.mss() as sct:
         # The screen part to capture
-        monitor = {"top": top + 5, "left": left + 5, "width": width - 10, "height": height - 10}
+        monitor = {"top": top, "left": left, "width": width, "height": height}
         output = "capturedImage.png".format(**monitor)
 
         # Grab the data

@@ -23,6 +23,7 @@ let textSubscribingClients = []
 
 let imageColorValuesObject = {hMin: 0, sMin: 0, vMin: 0, hMax: 179, sMax: 255, vMax: 255, binarizedValue: 1}
 let textPostionObject = { x: 0, y: 0, width: 1000, height: 500 }
+let imageOrientation = "horizontal"
 
 webSocketServer.on('connection', (webSocketConnection) => {
 	webSocketConnection.on('message', async (data) => {
@@ -67,25 +68,28 @@ webSocketServer.on('connection', (webSocketConnection) => {
 			imageColorValuesObject.sMax = content.saturationMaxValue
 			imageColorValuesObject.vMax = content.valueMaxValue
 			imageColorValuesObject.binarizedValue = content.binarizedValue
-
-			console.log(content)
 		}
 
 		if (message == "update new position") {
 			textPostionObject = content
-			console.log(content)
+			let ImageWidth = content.width
+			let ImageHeight = content.height
+			if (ImageHeight > ImageWidth) {
+				imageOrientation = "vertical"
+				console.log(imageOrientation)
+			}
+			else {
+				imageOrientation = "horizontal"
+				console.log(imageOrientation)
+			}
 		}
 
 		if (message == "crop and edit this image") {
-			console.log("#####################################################################")
-			console.log({imageColorValuesObject:imageColorValuesObject, textPostionObject:textPostionObject})
-			console.log("#####################################################################")
-
 			sendMessageToServer({imageColorValuesObject:imageColorValuesObject, textPostionObject:textPostionObject}, "crops then changes image color")
 
 			await delay(250)
 
-			Promise.resolve(translateTextInImage('colorChangedImage.png', extractedLanguage, translationLanguage))
+			Promise.resolve(translateTextInImage('colorChangedImage.png', imageOrientation, extractedLanguage, translationLanguage))
 			.then(data => {
 				sendMessageAndContentToAllClients(textSubscribingClients, "text from server", data)
 			})
@@ -103,6 +107,8 @@ webSocketServer.on('connection', (webSocketConnection) => {
 
 	webSocketConnection.on('close', () => {
 		removeElementFromArray(webSocketConnection, imageSubscribingClients)
+		removeElementFromArray(webSocketConnection, textSubscribingClients)
+		removeElementFromArray(webSocketConnection, capturedImageSubscribingClients)
 	});
 
 });
@@ -119,28 +125,21 @@ function sendMessageToServer(thisContent, thisMessage) {
 
 }
 
-// app.use(cors())
-// app.use(bodyParser.json({limit: '100mb', extended: true}))
-// app.use(bodyParser.urlencoded({limit: '100mb', extended: true}))
+app.use(cors())
+app.use(bodyParser.json({limit: '100mb', extended: true}))
+app.use(bodyParser.urlencoded({limit: '100mb', extended: true}))
 
-// app.post('/', function (req, res) {
-//     const body = req.body;
-//     let message = body.message
-//     let content = body.content
+app.post('/', function (req, res) {
+    const body = req.body;
+    let message = body.message
+    let content = body.content
 
-//     if (message === "image HSV") {
-//         imageColorValuesObject.hMin = content.hueMinValue
-//         imageColorValuesObject.sMin = content.saturationMinValue
-//         imageColorValuesObject.vMin = content.valueMinValue
-//         imageColorValuesObject.hMax = content.hueMaxValue
-//         imageColorValuesObject.sMax = content.saturationMaxValue
-//         imageColorValuesObject.vMax = content.valueMaxValue
+	if (message == "close server") {
+		res.send(JSON.stringify({content: "no content", message: "node server closing"}))
+		process.exit()
+	}
 
-//         console.log("check colors", imageColorValuesObject)
-//     }
-
-//     res.send(JSON.stringify({replay: "hello you"}))
-// });
+});
 
 app.listen(portNumber, function (err) {
   if (err) {
