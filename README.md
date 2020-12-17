@@ -45,20 +45,15 @@ Note: Window developers can click on Visual Novel OCR.bat to open all three comm
   - "npm package" 
 
 ### INSTALLATION FOR MACOS (CREDIT TO @pakoito): 
+```
 brew install tesseract
-
 cp ~/Downloads/jpn.traineddata /usr/local/Cellar/tesseract/4.1.1/shared/tessdata/jpn.traineddata
-
 pip3 install opencv-python numpy flask flask-cors mss python-dotenv
-
 git clone https://github.com/leminhyen2/Visual-Novel-OCR.git
-
 cd Visual-Novel-OCR/userInterface
-
 npm install
-
 npm start
-
+```
 # new terminal
 cd ../backendServer
 vi node-tesseract-ocr.js
