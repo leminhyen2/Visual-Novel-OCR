@@ -71,7 +71,7 @@ cp ~/Downloads/jpn_vert.traineddata /usr/local/Cellar/tesseract/4.1.1/shared/tes
 ```
 git clone https://github.com/leminhyen2/Visual-Novel-OCR.git
 ```
-- User Interface:
+- One terminal for User Interface:
 ```
 cd Visual-Novel-OCR/userInterface
 npm install
@@ -92,6 +92,7 @@ node server.js
 ```
 cd Visual-Novel-OCR/backendServer
 pip3 install opencv-python numpy flask flask-cors mss python-dotenv
+python3 -m flask run
 ```
 
 - Note: you can automate all these by writing a shell script
