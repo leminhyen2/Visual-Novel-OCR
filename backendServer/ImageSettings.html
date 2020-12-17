@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script async src="opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
+<style>
+.slidecontainer {
+  width: 98%;
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 80%;
+  height: 15px;
+  border-radius: 5px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #4CAF50;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #4CAF50;
+  cursor: pointer;
+}
+
+img {
+    max-width: 100%;
+}
+
+.container {
+    margin: 7px;
+    border: 3px solid black;
+}
+
+.sliderContainer {
+    display: flex;
+}
+
+.sliderLabel {
+    margin-top: 0;
+}
+
+</style>
+</head>
+<body>
+
+
+<div class="slidecontainer container">
+    <div class="sliderLabel">
+        <h3>Change background to black (<span id="status">OpenCV.js is loading...</span>)
+        </h3>
+    </div>
+
+    <div class="sliderContainer">
+        <p class="sliderLabel">Color value min: <span id="hueMinValue"></span></p>
+        <input type="range" min="0" max="179" value="0" class="slider" id="hueMinSlider">
+    </div>
+
+    <div class="sliderContainer">
+        <p class="sliderLabel">Saturation min: <span id="saturationMinValue"></span></p>
+        <input type="range" min="0" max="255" value="0" class="slider" id="saturationMinSlider">
+    </div>
+
+    <div class="sliderContainer">
+        <p class="sliderLabel">Brightness min: <span id="valueMinValue"></span></p>
+        <input type="range" min="0" max="255" value="0" class="slider" id="valueMinSlider">
+    </div>
+
+    <div class="sliderContainer">
+        <p class="sliderLabel">Color value max: <span id="hueMaxValue"></span></p>
+        <input type="range" min="0" max="179" value="179" class="slider" id="hueMaxSlider">
+    </div>
+
+    <div class="sliderContainer">
+        <p class="sliderLabel">Saturation max: <span id="saturationMaxValue"></span></p>
+        <input type="range" min="0" max="255" value="255" class="slider" id="saturationMaxSlider">
+    </div>
+
+    <div class="sliderContainer">
+        <p class="sliderLabel">Brightness max: <span id="valueMaxValue"></span></p>
+        <input type="range" min="0" max="255" value="255" class="slider" id="valueMaxSlider">
+    </div>
+
+</div>
+
+<div class="slidecontainer container">
+    <div class="sliderLabel">
+        <h3>Binarize Image (usually default is good enough)</h3>
+    </div>
+
+    <div class="sliderContainer">
+        <p class="sliderLabel">Color value min: <span id="binarizedValue"></span></p>
+        <input type="range" min="0" max="255" value="1" class="slider" id="binarizedSlider">
+    </div>
+</div>
+
+<div class="container">
+    
+    <div>
+        <h3 class="caption">Finalized Image</h3>
+        <div class="inputoutput container">
+            <canvas id="finalizedCanvasOutput" ></canvas>
+        </div>
+
+        <h3 class="caption">Show Edited Image</h3>
+        <div class="inputoutput container">
+            <canvas id="canvasOutput" ></canvas>
+        </div>
+
+        <h3 class="caption">Image Upload <input type="file" id="fileInput" name="file" /></h3>
+        <div class="inputoutput container">
+            <img id="imageSrc" alt="No Image" />
+        </div>
+
+    </div>
+</div>
+
+
+
+<script>
+
+
+
+class ServerConnection {
+    constructor() {
+        this.server = 'http://localhost:8676/'
+    }
+
+    async sendingData(thisContent, thisMessage) {
+        const response = await fetch(this.server, {
+            method: 'POST', // or 'PUT'
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({content: thisContent, message: thisMessage})
+        })
+        
+        const textData = await response.json()
+
+        console.log(textData)
+        return textData
+    }
+}
+
+let serverConnection = new ServerConnection()
+
+// let canvas = document.getElementById("canvasOutput");
+// let ctx = canvas.getContext("2d");
+// ctx.fillStyle = "black";
+// ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+class OriginalImage {
+    constructor () {
+        this.imgElement = document.getElementById('imageSrc');
+        this.inputElement = document.getElementById('fileInput');
+    }
+
+    listenForLoad() {
+        this.inputElement.addEventListener('change', (e) => {
+            this.imgElement.src = URL.createObjectURL(e.target.files[0]);
+        }, false);
+
+        this.imgElement.onload = () => {
+            let image = cv.imread(this.imgElement);
+            cv.imshow('canvasOutput', image)
+            image.delete()
+            editedImage.updatesChange()
+        }
+    }
+
+}
+
+let originalImage = new OriginalImage()
+originalImage.listenForLoad()
+
+class EditedImage {
+    constructor() {
+        this.hueMinValue = 0
+        this.saturationMinValue = 0
+        this.valueMinValue = 0
+        this.hueMaxValue = 179
+        this.saturationMaxValue = 255
+        this.valueMaxValue = 255
+
+        this.binarizedValue = 1
+
+        this.imgElement = document.getElementById('imageSrc');
+    }
+
+    returnImageColorValues() {
+        return {hueMinValue: this.hueMinValue, saturationMinValue: this.saturationMinValue,
+                valueMinValue: this.valueMinValue, hueMaxValue: this.hueMaxValue,
+                saturationMaxValue: this.saturationMaxValue, valueMaxValue: this.valueMaxValue, binarizedValue: this.binarizedValue}
+    }
+
+    updateHueMinValue(newValue) {
+        console.log("this new value", newValue)
+        this.hueMinValue = newValue
+        this.updatesChange()
+    }
+
+    updateSaturationMinValue(newValue) {
+        this.saturationMinValue = newValue
+        this.updatesChange()
+    }
+
+    updateValueMinValue(newValue) {
+        this.valueMinValue = newValue
+        this.updatesChange()
+    }
+
+    updateHueMaxValue(newValue) {
+        this.hueMaxValue = newValue
+        this.updatesChange()
+    }
+
+    updateSaturationMaxValue(newValue) {
+        this.saturationMaxValue = newValue
+        this.updatesChange()
+    }
+
+    updateValueMaxValue(newValue) {
+        this.valueMaxValue = newValue
+        this.updatesChange()
+    }
+
+    updateBinarizedValue(newValue) {
+        this.binarizedValue = newValue
+        this.updatesChange()
+    }
+
+    updatesChange() {
+        //serverConnection.sendingData(this.returnImageColorValues(), "image HSV")
+        console.log(this.hueMinValue, this.saturationMinValue, this.valueMinValue, this.hueMaxValue, this.saturationMaxValue, this.valueMaxValue)
+        let lower = new cv.Scalar(this.hueMinValue, this.saturationMinValue, this.valueMinValue)
+        let upper = new cv.Scalar(this.hueMaxValue, this.saturationMaxValue, this.valueMaxValue)
+
+        let image = cv.imread(this.imgElement)
+        let hsv = new cv.Mat()
+        let mask = new cv.Mat()
+        let output = new cv.Mat()
+
+        cv.cvtColor(image, hsv, cv.COLOR_RGBA2RGB);
+        cv.cvtColor(hsv, hsv, cv.COLOR_RGB2HSV);
+
+        // cv.cvtColor(image, hsv, cv.COLOR_BGRA2RGB);
+        // cv.cvtColor(hsv, hsv, cv.COLOR_BGR2HSV);
+
+        let lowerBound = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), lower);
+        let higherBound = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), upper);
+
+        cv.inRange(hsv, lowerBound, higherBound, mask)
+        cv.bitwise_and(image, image, output, mask= mask)
+
+        cv.cvtColor(output, output, cv.COLOR_RGBA2RGB);
+        cv.imshow('canvasOutput', output)
+
+        let binarizedOutput = new cv.Mat()
+        cv.threshold(output, binarizedOutput, this.binarizedValue, 255, cv.THRESH_BINARY_INV); 
+        //cv.threshold(output, binarizedOutput, this.binarizedValue, 255, cv.THRESH_BINARY); 
+
+        cv.imshow('finalizedCanvasOutput', binarizedOutput)
+
+        image.delete()
+        hsv.delete()
+        mask.delete()
+        output.delete()
+        binarizedOutput.delete()
+        lowerBound.delete()
+        higherBound.delete()
+    }
+
+}
+
+let editedImage = new EditedImage()
+
+class Slider {
+    constructor(receivedSliderElement, receivedSliderValueElement) {
+        this.sliderElement = receivedSliderElement 
+        this.sliderValueElement = receivedSliderValueElement
+    }
+
+    getValue() {
+        return this.sliderElement.value 
+    }
+}
+
+class CollectionOfSliders {
+    constructor () {
+        this.hueMinSlider = new Slider(document.getElementById("hueMinSlider"), document.getElementById("hueMinValue"))
+        this.saturationMinSlider = new Slider(document.getElementById("saturationMinSlider"), document.getElementById("saturationMinValue"))
+        this.valueMinSlider = new Slider(document.getElementById("valueMinSlider"), document.getElementById("valueMinValue"))
+        this.hueMaxSlider = new Slider(document.getElementById("hueMaxSlider"), document.getElementById("hueMaxValue"))
+        this.saturationMaxSlider = new Slider(document.getElementById("saturationMaxSlider"), document.getElementById("saturationMaxValue"))
+        this.valueMaxSlider = new Slider(document.getElementById("valueMaxSlider"), document.getElementById("valueMaxValue"))
+
+        this.binarizedSlider = new Slider(document.getElementById("binarizedSlider"), document.getElementById("binarizedValue"))
+
+    }
+
+    hueMinSliderListen() {
+        this.hueMinSlider.sliderValueElement.innerHTML = this.hueMinSlider.getValue()
+
+        this.hueMinSlider.sliderElement.oninput = () => {
+            let sliderValue = this.hueMinSlider.getValue()
+            this.hueMinSlider.sliderValueElement.innerHTML = sliderValue
+            editedImage.updateHueMinValue(parseInt(sliderValue))
+        }
+    }
+
+    saturationMinSliderListen() {
+        this.saturationMinSlider.sliderValueElement.innerHTML = this.saturationMinSlider.getValue()
+
+        this.saturationMinSlider.sliderElement.oninput = () => {
+            let sliderValue = this.saturationMinSlider.getValue()
+            this.saturationMinSlider.sliderValueElement.innerHTML = sliderValue
+            editedImage.updateSaturationMinValue(parseInt(sliderValue))
+        }
+    }
+    
+
+    valueMinSliderListen() {
+        this.valueMinSlider.sliderValueElement.innerHTML = this.valueMinSlider.getValue()
+
+        this.valueMinSlider.sliderElement.oninput = () => {
+            let sliderValue = this.valueMinSlider.getValue()
+            this.valueMinSlider.sliderValueElement.innerHTML = sliderValue
+            editedImage.updateValueMinValue(parseInt(sliderValue))
+        }
+    }
+
+    hueMaxSliderListen() {
+        this.hueMaxSlider.sliderValueElement.innerHTML = this.hueMaxSlider.getValue()
+
+        this.hueMaxSlider.sliderElement.oninput = () => {
+            let sliderValue = this.hueMaxSlider.getValue()
+            this.hueMaxSlider.sliderValueElement.innerHTML = sliderValue
+            editedImage.updateHueMaxValue(parseInt(sliderValue))
+        }
+    }
+
+    saturationMaxSliderListen() {
+        this.saturationMaxSlider.sliderValueElement.innerHTML = this.saturationMaxSlider.getValue()
+
+        this.saturationMaxSlider.sliderElement.oninput = () => {
+            let sliderValue = this.saturationMaxSlider.getValue()
+            this.saturationMaxSlider.sliderValueElement.innerHTML = sliderValue
+            editedImage.updateSaturationMaxValue(parseInt(sliderValue))
+        }
+    }
+
+    valueMaxSliderListen() {
+        this.valueMaxSlider.sliderValueElement.innerHTML = this.valueMaxSlider.getValue()
+
+        this.valueMaxSlider.sliderElement.oninput = () => {
+            let sliderValue = this.valueMaxSlider.getValue()
+            this.valueMaxSlider.sliderValueElement.innerHTML = sliderValue
+            editedImage.updateValueMaxValue(parseInt(sliderValue))
+        }
+    }
+
+    binarizedSliderListen() {
+        this.binarizedSlider.sliderValueElement.innerHTML = this.binarizedSlider.getValue()
+
+        this.binarizedSlider.sliderElement.oninput = () => {
+            let sliderValue = this.binarizedSlider.getValue()
+            this.binarizedSlider.sliderValueElement.innerHTML = sliderValue
+            editedImage.updateBinarizedValue(parseInt(sliderValue))
+        }
+    }
+
+    listen() {
+        this.hueMinSliderListen()
+        this.saturationMinSliderListen()
+        this.valueMinSliderListen()
+        this.hueMaxSliderListen()
+        this.saturationMaxSliderListen()
+        this.valueMaxSliderListen()
+
+        this.binarizedSliderListen()
+
+    }
+}
+
+
+let collectionOfSliders = new CollectionOfSliders()
+collectionOfSliders.listen()
+
+
+function onOpenCvReady() {
+    document.getElementById('status').innerHTML = 'OpenCV.js is ready.';
+}
+</script>
+
+</body>
+</html>
