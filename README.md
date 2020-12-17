@@ -78,7 +78,7 @@ npm install
 npm start
 ```
 
-- One terminal for NodeJS server:
+- One terminal for NodeJS server (install packages and change Tesseract directory):
 ```
 cd Visual-Novel-OCR/backendServer
 vi node-tesseract-ocr.js
