@@ -65,7 +65,7 @@ Note: Window developers can click on Visual Novel OCR.bat to open all three comm
 ```
 brew install tesseract
 cp ~/Downloads/jpn.traineddata /usr/local/Cellar/tesseract/4.1.1/shared/tessdata/jpn.traineddata
-cp ~/Downloads/jpn.traineddata /usr/local/Cellar/tesseract/4.1.1/shared/tessdata/jpn_vert.traineddata
+cp ~/Downloads/jpn_vert.traineddata /usr/local/Cellar/tesseract/4.1.1/shared/tessdata/jpn_vert.traineddata
 ```
 
 ```
