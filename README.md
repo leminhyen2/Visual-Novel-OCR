@@ -33,10 +33,24 @@ https://www.youtube.com/watch?v=AdLwcU03230
   - Go to backendServer/node-tesseract-ocr.js and update Tesseract-OCR's directory
   - For Window environment, I would the whole folder inside backendServer/
 
-### Activation: 
-- ElectronJS (npm start)
-- Flask server (python3 -m flask run)
-- NodeJS server (node server.js)
+### Activation (same for MacOS): 
+- One terminal for User Interface:
+```
+cd Visual-Novel-OCR/userInterface
+npm start
+```
+
+- One terminal for NodeJS server:
+```
+cd Visual-Novel-OCR/backendServer
+node server.js
+```
+
+- One terminal for Python Flask server:
+```
+cd Visual-Novel-OCR/backendServer
+python3 -m flask run
+```
 
 Note: Window developers can click on Visual Novel OCR.bat to open all three commands at the same time
 
@@ -78,25 +92,6 @@ node server.js
 ```
 cd ../backendServer
 pip3 install opencv-python numpy flask flask-cors mss python-dotenv
-```
-
-### Activation For MacOS (same as Window): 
-- One terminal for User Interface:
-```
-cd Visual-Novel-OCR/userInterface
-npm start
-```
-
-- One terminal for NodeJS server:
-```
-cd Visual-Novel-OCR/backendServer
-node server.js
-```
-
-- One terminal for Python Flask server:
-```
-cd Visual-Novel-OCR/backendServer
-python3 -m flask run
 ```
 
 - Note: you can automate all these by writing a shell script
