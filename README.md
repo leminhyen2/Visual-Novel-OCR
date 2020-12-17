@@ -28,8 +28,8 @@ https://www.youtube.com/watch?v=AdLwcU03230
 - Tesseract-OCR 5:
   - Download from https://digi.bib.uni-mannheim.de/tesseract/?C=M;O=A
   - Download best pre-trained models from https://github.com/tesseract-ocr/tessdata_best
-  - For Japanese language, choose https://github.com/tesseract-ocr/tessdata_best/blob/master/jpn.traineddata
-  - Drag jpn.traineddata to Tesseract-OCR/tessdata
+  - For Japanese language (horizontal and vertical), choose https://github.com/tesseract-ocr/tessdata_best/blob/master/jpn.traineddata and https://github.com/tesseract-ocr/tessdata_best/blob/master/jpn_vert.traineddata
+  - Drag jpn.traineddata and jpn_vert.traineddata to Tesseract-OCR/tessdata
   - Go to backendServer/node-tesseract-ocr.js and update Tesseract-OCR's directory
   - For Window environment, I would the whole folder inside backendServer/
 
@@ -44,14 +44,21 @@ Note: Window developers can click on Visual Novel OCR.bat to open all three comm
 - User Interface:
   - "npm package" 
 
-### INSTALLATION FOR MACOS (CREDIT TO @pakoito): 
-- One terminal for User Interface:
+### INSTALLATION FOR MACOS (CREDIT TO @pakoito FOR THE INITIAL GUIDE): 
+- Tesseract-OCR (may need some adjustment on your side):
+  -   - For Japanese language (horizontal and vertical), choose https://github.com/tesseract-ocr/tessdata_best/blob/master/jpn.traineddata and https://github.com/tesseract-ocr/tessdata_best/blob/master/jpn_vert.traineddata
+
 ```
 brew install tesseract
 cp ~/Downloads/jpn.traineddata /usr/local/Cellar/tesseract/4.1.1/shared/tessdata/jpn.traineddata
 cp ~/Downloads/jpn.traineddata /usr/local/Cellar/tesseract/4.1.1/shared/tessdata/jpn_vert.traineddata
-pip3 install opencv-python numpy flask flask-cors mss python-dotenv
+```
+
+```
 git clone https://github.com/leminhyen2/Visual-Novel-OCR.git
+```
+- User Interface:
+```
 cd Visual-Novel-OCR/userInterface
 npm install
 npm start
@@ -69,5 +76,27 @@ node server.js
 
 - One terminal for Python Flask server:
 ```
+cd ../backendServer
+pip3 install opencv-python numpy flask flask-cors mss python-dotenv
+```
+
+### Activation For MacOS (same as Window): 
+- One terminal for User Interface:
+```
+cd Visual-Novel-OCR/userInterface
+npm start
+```
+
+- One terminal for NodeJS server:
+```
+cd Visual-Novel-OCR/backendServer
+node server.js
+```
+
+- One terminal for Python Flask server:
+```
+cd Visual-Novel-OCR/backendServer
 python3 -m flask run
 ```
+
+- Note: you can automate all these by writing a shell script
