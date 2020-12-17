@@ -80,7 +80,7 @@ npm start
 
 - One terminal for NodeJS server:
 ```
-cd ../backendServer
+cd Visual-Novel-OCR/backendServer
 vi node-tesseract-ocr.js
 # -  const binary = "Tesseract-OCR\\tesseract.exe"
 # +  const binary = "/usr/local/Cellar/tesseract/4.1.1/bin/tesseract"
@@ -90,7 +90,7 @@ node server.js
 
 - One terminal for Python Flask server:
 ```
-cd ../backendServer
+cd Visual-Novel-OCR/backendServer
 pip3 install opencv-python numpy flask flask-cors mss python-dotenv
 ```
 
