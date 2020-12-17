@@ -60,7 +60,7 @@ Note: Window developers can click on Visual Novel OCR.bat to open all three comm
 
 ### INSTALLATION FOR MACOS (CREDIT TO @pakoito FOR THE INITIAL GUIDE): 
 - Tesseract-OCR (may need some adjustment on your side):
-  -   - For Japanese language (horizontal and vertical), choose https://github.com/tesseract-ocr/tessdata_best/blob/master/jpn.traineddata and https://github.com/tesseract-ocr/tessdata_best/blob/master/jpn_vert.traineddata
+  - For Japanese language (horizontal and vertical), choose https://github.com/tesseract-ocr/tessdata_best/blob/master/jpn.traineddata and https://github.com/tesseract-ocr/tessdata_best/blob/master/jpn_vert.traineddata
 
 ```
 brew install tesseract
