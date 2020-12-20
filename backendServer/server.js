@@ -1,3 +1,8 @@
+const listOfVariablesData = require("./listOfVariablesData.json")
+const httpServerPortNumber = listOfVariablesData.HTTPserverPortNumber
+const websocketServerPortNumber = listOfVariablesData.websocketServerPortNumber
+const pythonFlaskServerPortNumber = listOfVariablesData.pythonFlaskServerPortNumber
+
 const fs = require('fs') 
 
 const express = require('express');
@@ -10,12 +15,11 @@ const fetch = require('node-fetch');
 
 const translateTextInImage = require("./imgTranslation.js")
 
-const portNumber = 8676
 let extractedLanguage = "ja"
 let translationLanguage = "en"
 
 const WebSocket = require('ws');
-const webSocketServer = new WebSocket.Server({ port: 9676 });
+const webSocketServer = new WebSocket.Server({ port: websocketServerPortNumber });
 
 let capturedImageSubscribingClients = []
 let imageSubscribingClients = []
@@ -144,7 +148,7 @@ webSocketServer.on('connection', (webSocketConnection) => {
 
 
 function sendMessageToServer(thisContent, thisMessage) {  
-	fetch('http://localhost:7676/', {
+	fetch(`http://localhost:${pythonFlaskServerPortNumber}/`, {
 			method: 'post',
 			body:    JSON.stringify({content: thisContent, message: thisMessage}),
 			headers: { 'Content-Type': 'application/json' },
@@ -169,12 +173,12 @@ app.post('/', function (req, res) {
 
 });
 
-app.listen(portNumber, function (err) {
+app.listen(httpServerPortNumber, function (err) {
   if (err) {
     throw err;
   }
 
-  console.log(`Server started on port ${portNumber} and 9676`);
+  console.log(`Server started on port ${httpServerPortNumber} and ${webSocketServer}`);
   console.log(`You can now minimize the command lines windows`);
   console.log(`In case the program seems to have errors or not responding, take a look at both cmd windows`);
 
