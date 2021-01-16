@@ -18,6 +18,8 @@ const translateTextInImage = require("./imgTranslation.js")
 let extractedLanguage = "ja"
 let translationLanguage = "en"
 
+const ioHook = require('iohook');
+
 const WebSocket = require('ws');
 const webSocketServer = new WebSocket.Server({ port: websocketServerPortNumber });
 
@@ -30,29 +32,17 @@ let imageColorValuesObject = {hMin: 0, sMin: 0, vMin: 0, hMax: 179, sMax: 255, v
 let textPostionObject = { x: 0, y: 0, width: 1000, height: 500 }
 let imageOrientation = "horizontal"
 
-const ioHook = require('iohook');
-
-ioHook.on('keydown', keyboardEvent => {
-	console.log(keyboardEvent)
-	if (checkIfBackTickButton(keyboardEvent) || checkIfTabButton(keyboardEvent)) {
-		sendMessageAndContentToAllClients(keyboardSubscribingClients, "get image coordinates then send to server", "no content")
-	}
-});
+// Register shortcuts
+// [Tab, Tab, CapsLock, CapsLock, BackTick, BackTick]
+const textExtractShortcuts = [15, 9, 58, 20, 192, 41]
+for (const key of textExtractShortcuts) {
+	ioHook.registerShortcut([key], (keys) => {
+	  sendMessageAndContentToAllClients(keyboardSubscribingClients, "get image coordinates then send to server", "no content")
+	});
+}
 
 // Register and start hook
 ioHook.start();
-
-function checkIfBackTickButton(keyboardEvent) {
-	return (keyboardEvent.keycode === 41 || keyboardEvent.rawcode === 192)
-}
-
-function checkIfTabButton(keyboardEvent) {
-	return (keyboardEvent.keycode === 15 || keyboardEvent.rawcode === 9)
-}
-
-function checkIfCapsLockButton(keyboardEvent) {
-	return (keyboardEvent.keycode === 58 || keyboardEvent.rawcode === 20)
-}
 
 webSocketServer.on('connection', (webSocketConnection) => {
 	webSocketConnection.on('message', async (data) => {
