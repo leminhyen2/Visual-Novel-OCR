@@ -38,6 +38,8 @@ let imageOrientation = "horizontal"
 
 const ioHook = require('iohook');
 
+console.log("test test test, you can type anything here then follow my commands")
+
 ioHook.on('keydown', keyboardEvent => {
 	//console.log(keyboardEvent)
 	if (checkIfTranslateButtonShortcut(keyboardEvent)) {
