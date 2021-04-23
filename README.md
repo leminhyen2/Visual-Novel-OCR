@@ -1,5 +1,3 @@
-TEST TEST TEST TEST TEST
-
 Want to help out? 
 Need tech-support?
 Join our discord at https://discord.com/invite/XFbWSjMHJh
@@ -7,7 +5,7 @@ Join our discord at https://discord.com/invite/XFbWSjMHJh
 Demo Video:
 https://www.youtube.com/watch?v=AdLwcU03230
 
-For Mac users:git pull
+For Mac users:
 If you want to use this program, navigate to V2.0 branch and follow the instructions down below
 
 ### Requirements: 
