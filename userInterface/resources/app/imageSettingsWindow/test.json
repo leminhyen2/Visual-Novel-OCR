@@ -1,0 +1,9 @@
+{
+    "saturationMaxValue": 255,
+    "valueMaxValue": 255,
+    "hueMaxValue": 179,
+    "saturationMinValue": 175,
+    "valueMinValue": 162,
+    "hueMinValue": 0,
+    "binarizedValue": 97
+}
