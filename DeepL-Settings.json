@@ -1,0 +1,5 @@
+{
+    "hideBrowserWindowTrueOrFalse": true,
+    "inputTextboxID": "#source-dummydiv",
+    "resultTextboxID": "#target-dummydiv"
+}
