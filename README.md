@@ -6,7 +6,7 @@ Demo Video:
 https://www.youtube.com/watch?v=AdLwcU03230
 
 For Mac users:
-If you want to use this program, navigate to V2.0 branch
+If you want to use this program, navigate to V2.0 branch and follow the instructions
 
 ### Requirements: 
 - User Interface:
