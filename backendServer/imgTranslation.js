@@ -10,8 +10,10 @@ module.exports =  async function translateTextInImage(imageFile, imageOrientatio
     }
     else {
         clipboardy.writeSync(jpText);
-        englishText = await Promise.resolve(requestBingTranslation(extractedLanguage, jpText, translationLanguage)).then(result => {return result})
+        //englishText = await Promise.resolve(requestBingTranslation(extractedLanguage, jpText, translationLanguage)).then(result => {return result})
     }
-    return {extracted:jpText, translated:englishText}
+    // return {extracted:jpText, translated:englishText}
+    return jpText
+
 }
 

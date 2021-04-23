@@ -6,6 +6,8 @@ import json
 import takeScreenshot as screenshot 
 import removeBackground as background
 
+import checkImage
+
 app = Flask(__name__)
 
 cors = CORS(app)
@@ -47,6 +49,38 @@ def sendImage():
 
         screenshot.takeScreenshot(y, x, width, height)
         print(content)
+    
+    if (message == "check if new complete text image"):
+        textPostionObject = content["textPostionObject"]
+        x = textPostionObject["x"]
+        y = textPostionObject["y"]
+        width = textPostionObject["width"]
+        height = textPostionObject["height"]
+        screenshot.takeScreenshot(y, x, width, height)
+
+        imageColorValuesObject = content["imageColorValuesObject"]
+        hMin = imageColorValuesObject["hMin"]
+        sMin = imageColorValuesObject["sMin"]
+        vMin = imageColorValuesObject["vMin"]
+        hMax = imageColorValuesObject["hMax"]
+        sMax = imageColorValuesObject["sMax"]
+        vMax = imageColorValuesObject["vMax"]
+        binarizedValue = imageColorValuesObject["binarizedValue"]
+        background.removeBackground(hMin, sMin, vMin, hMax, sMax, vMax, binarizedValue)
+
+        result = checkImage.checkIfNewFullTextImage("colorChangedImage.png")
+        return json.dumps(result)
+
+        # x = content["x"]
+        # y = content["y"]
+        # width = content["width"]
+        # height = content["height"]
+
+        # screenshot.takeScreenshot(y, x, width, height)
+
+        # result = checkImage.checkIfNewFullTextImage("capturedImage.png")
+        # print(result)
+        # return json.dumps(result)
 
     if (message == "changes image color"):
         hMin = content["hMin"]
