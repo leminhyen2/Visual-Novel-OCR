@@ -12,6 +12,7 @@
     "axios": "^0.20.0",
     "base64-img": "^1.0.4",
     "body-parser": "^1.18.3",
+    "clipboard-listener": "^0.2.3",
     "clipboardy": "^2.3.0",
     "cors": "^2.8.5",
     "dotenv": "^8.0.0",
@@ -21,6 +22,7 @@
     "node-fetch": "^2.6.1",
     "node-tesseract-ocr": "^2.0.0",
     "open": "^7.2.0",
+    "puppeteer": "^5.5.0",
     "request": "^2.88.2",
     "ws": "^7.4.0"
   }

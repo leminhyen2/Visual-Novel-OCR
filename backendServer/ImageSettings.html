@@ -276,8 +276,6 @@ class EditedImage {
 
         let binarizedOutput = new cv.Mat()
         cv.threshold(output, binarizedOutput, this.binarizedValue, 255, cv.THRESH_BINARY_INV); 
-        //cv.threshold(output, binarizedOutput, this.binarizedValue, 255, cv.THRESH_BINARY); 
-
         cv.imshow('finalizedCanvasOutput', binarizedOutput)
 
         image.delete()

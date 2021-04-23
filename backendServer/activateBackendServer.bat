@@ -1,2 +1,2 @@
 color 2
-node server.js
+node.exe server.js

@@ -26,7 +26,23 @@ module.exports =  async function (imageFile, imageOrientation="horizontal") {
 	}
 
 	const jpTextWithNoSpace = text.replace(/\s/g, '')
-	return jpTextWithNoSpace
+
+	// ト‥はい、まあ。どうしていいかわかんないくらいには…コ」
+
+	//return jpTextWithNoSpace
+
+	return processExtractedText(jpTextWithNoSpace)
 }
 
+function processExtractedText(extractedText) {
+	let result = extractedText
+	result = result.replace(/^ト/, "");
+	result = result.replace(/^`/, "");
+	result = result.replace(/^`ト/, "");
+	result = result.replace(/コ」$/, "");
+	result = result.replace(/コ$/, "");
+	result = result.replace(/」$/, "");
+	result = result.replace(/ュ$/, "");
+	return result
+}
 

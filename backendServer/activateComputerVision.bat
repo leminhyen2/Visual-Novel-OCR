@@ -1,2 +1,3 @@
 color 2
-python3 -m flask run
+"%~dp0/Python38/python.exe" -m flask run
+

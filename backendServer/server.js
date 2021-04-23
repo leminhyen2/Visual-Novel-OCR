@@ -3,6 +3,9 @@ const httpServerPortNumber = listOfVariablesData.HTTPserverPortNumber
 const websocketServerPortNumber = listOfVariablesData.websocketServerPortNumber
 const pythonFlaskServerPortNumber = listOfVariablesData.pythonFlaskServerPortNumber
 
+const keyboardShortcuts = require("./keyboardShortcuts.json")
+const translationWindowSettings = require("../translationWindowSettings.json")
+
 const fs = require('fs') 
 
 const express = require('express');
@@ -23,8 +26,11 @@ const webSocketServer = new WebSocket.Server({ port: websocketServerPortNumber }
 
 let capturedImageSubscribingClients = []
 let imageSubscribingClients = []
-let textSubscribingClients = []
+let translationWindow = []
 let keyboardSubscribingClients = []
+
+let transparentWindow = []
+let mainMenuWindow = []
 
 let imageColorValuesObject = {hMin: 0, sMin: 0, vMin: 0, hMax: 179, sMax: 255, vMax: 255, binarizedValue: 1}
 let textPostionObject = { x: 0, y: 0, width: 1000, height: 500 }
@@ -33,26 +39,36 @@ let imageOrientation = "horizontal"
 const ioHook = require('iohook');
 
 ioHook.on('keydown', keyboardEvent => {
-	console.log(keyboardEvent)
-	if (checkIfBackTickButton(keyboardEvent) || checkIfTabButton(keyboardEvent)) {
-		sendMessageAndContentToAllClients(keyboardSubscribingClients, "get image coordinates then send to server", "no content")
+	//console.log(keyboardEvent)
+	if (checkIfTranslateButtonShortcut(keyboardEvent)) {
+		sendMessageAndContentToAllClients(keyboardSubscribingClients, "activate translate button", "no content")
 	}
+
+	if (checkIfCustomCropButtonShortcut(keyboardEvent)) {
+		sendMessageAndContentToAllClients(keyboardSubscribingClients, "activate crop button", "no content")
+	}
+
 });
 
 // Register and start hook
 ioHook.start();
 
+function checkIfTranslateButtonShortcut(keyboardEvent) {
+	return (checkIfBackTickButton(keyboardEvent) || checkIfCustomTranslateButtonShortcut(keyboardEvent))
+}
+
 function checkIfBackTickButton(keyboardEvent) {
 	return (keyboardEvent.keycode === 41 || keyboardEvent.rawcode === 192)
 }
 
-function checkIfTabButton(keyboardEvent) {
-	return (keyboardEvent.keycode === 15 || keyboardEvent.rawcode === 9)
+function checkIfCustomTranslateButtonShortcut(keyboardEvent) {
+	return (keyboardEvent.keycode === keyboardShortcuts.translateButton.keycode || keyboardEvent.rawcode === keyboardShortcuts.translateButton.rawcode)
 }
 
-function checkIfCapsLockButton(keyboardEvent) {
-	return (keyboardEvent.keycode === 58 || keyboardEvent.rawcode === 20)
+function checkIfCustomCropButtonShortcut(keyboardEvent) {
+	return (keyboardEvent.keycode === keyboardShortcuts.cropButton.keycode || keyboardEvent.rawcode === keyboardShortcuts.cropButton.rawcode)
 }
+
 
 webSocketServer.on('connection', (webSocketConnection) => {
 	webSocketConnection.on('message', async (data) => {
@@ -61,7 +77,14 @@ webSocketServer.on('connection', (webSocketConnection) => {
 		let message = parsedData.message
 		let content = parsedData.content
 
-		console.log('received: %s', message);
+		//console.log('received: %s', message);
+
+		if (message == "windowScaleFactor") {
+			console.log("window scale factor", content)
+			// base64Img.base64('capturedImage.png', function(err, data) {
+			// 	sendMessageAndContentToClient(webSocketConnection, "image from server", data)
+			// })
+		}
 
 		if (message == "subscribe to captured image updates") {
 			capturedImageSubscribingClients.push(webSocketConnection)
@@ -78,15 +101,50 @@ webSocketServer.on('connection', (webSocketConnection) => {
 		}
 
 		if (message == "subscribe to text updates") {
-			textSubscribingClients.push(webSocketConnection)
-			// Promise.resolve(translateTextInImage('colorChangedImage.png', extractedLanguage, translationLanguage))
-			// .then(data => {
-			// 	sendMessageAndContentToAllClients(textSubscribingClients, "text from server", data)
-			// })
+			translationWindow.push(webSocketConnection)
+			sendMessageAndContentToAllClients(translationWindow, "change GUI settings", translationWindowSettings)
 		}
 
 		if (message == "subscribe to keyboard event") {
 			keyboardSubscribingClients.push(webSocketConnection)
+		}
+
+		if (message == "add transparent window connection") {
+			transparentWindow.push(webSocketConnection)
+		}
+
+		if (message == "add main menu window connection") {
+			mainMenuWindow.push(webSocketConnection)
+			sendMessageAndContentToAllClients(mainMenuWindow, "change translation window GUI settings", translationWindowSettings)
+		}
+
+		if (message == "check if new complete text image then translate") {
+			let result = await sendMessageToServer({imageColorValuesObject:imageColorValuesObject, textPostionObject:textPostionObject}, "check if new complete text image")
+			if (result === true) {
+				sendMessageAndContentToAllClients(transparentWindow, "get image position", data)
+
+				await delay(50)
+	
+				sendMessageToServer({imageColorValuesObject:imageColorValuesObject, textPostionObject:textPostionObject}, "crops then changes image color")
+	
+				await delay(250)
+
+				let extractedText = await Promise.resolve(translateTextInImage('colorChangedImage.png', imageOrientation, extractedLanguage, translationLanguage))
+				sendMessageAndContentToAllClients(translationWindow, "extracted text from server", {extracted: extractedText})
+	
+				// Promise.resolve(translateTextInImage('colorChangedImage.png', imageOrientation, extractedLanguage, translationLanguage))
+				// .then(data => {
+				// 	sendMessageAndContentToAllClients(translationWindow, "text from server", data)
+				// })
+	
+				base64Img.base64('colorChangedImage.png', function(err, data) {
+					sendMessageAndContentToAllClients(imageSubscribingClients, "image from server", data)
+				})
+	
+				base64Img.base64('capturedImage.png', function(err, data) {
+					sendMessageAndContentToAllClients(capturedImageSubscribingClients, "image from server", data)
+				})
+			}
 		}
 
 		if (message == "update translation language") {
@@ -104,6 +162,7 @@ webSocketServer.on('connection', (webSocketConnection) => {
 		}
 
 		if (message == "update new position") {
+			console.log("position", content)
 			textPostionObject = content
 			let ImageWidth = content.width
 			let ImageHeight = content.height
@@ -117,15 +176,46 @@ webSocketServer.on('connection', (webSocketConnection) => {
 			}
 		}
 
-		if (message == "crop and edit this image") {
+		if (message == "translate via crop window") {
 			sendMessageToServer({imageColorValuesObject:imageColorValuesObject, textPostionObject:textPostionObject}, "crops then changes image color")
 
 			await delay(250)
 
-			Promise.resolve(translateTextInImage('colorChangedImage.png', imageOrientation, extractedLanguage, translationLanguage))
-			.then(data => {
-				sendMessageAndContentToAllClients(textSubscribingClients, "text from server", data)
+			let extractedText = await Promise.resolve(translateTextInImage('colorChangedImage.png', imageOrientation, extractedLanguage, translationLanguage))
+			sendMessageAndContentToAllClients(translationWindow, "extracted text from server", {extracted: extractedText})
+
+
+			// Promise.resolve(translateTextInImage('colorChangedImage.png', imageOrientation, extractedLanguage, translationLanguage))
+			// .then(data => {
+			// 	sendMessageAndContentToAllClients(translationWindow, "text from server", data)
+			// })
+
+			base64Img.base64('colorChangedImage.png', function(err, data) {
+				sendMessageAndContentToAllClients(imageSubscribingClients, "image from server", data)
 			})
+
+			base64Img.base64('capturedImage.png', function(err, data) {
+				sendMessageAndContentToAllClients(capturedImageSubscribingClients, "image from server", data)
+			})
+		}
+
+		if (message == "translate via transparent window") {
+			sendMessageAndContentToAllClients(transparentWindow, "get image position", data)
+
+			await delay(50)
+
+			sendMessageToServer({imageColorValuesObject:imageColorValuesObject, textPostionObject:textPostionObject}, "crops then changes image color")
+
+			await delay(250)
+
+			let extractedText = await Promise.resolve(translateTextInImage('colorChangedImage.png', imageOrientation, extractedLanguage, translationLanguage))
+			sendMessageAndContentToAllClients(translationWindow, "extracted text from server", {extracted: extractedText})
+
+
+			// Promise.resolve(translateTextInImage('colorChangedImage.png', imageOrientation, extractedLanguage, translationLanguage))
+			// .then(data => {
+			// 	sendMessageAndContentToAllClients(translationWindow, "text from server", data)
+			// })
 
 			base64Img.base64('colorChangedImage.png', function(err, data) {
 				sendMessageAndContentToAllClients(imageSubscribingClients, "image from server", data)
@@ -140,21 +230,31 @@ webSocketServer.on('connection', (webSocketConnection) => {
 
 	webSocketConnection.on('close', () => {
 		removeElementFromArray(webSocketConnection, imageSubscribingClients)
-		removeElementFromArray(webSocketConnection, textSubscribingClients)
+		removeElementFromArray(webSocketConnection, translationWindow)
 		removeElementFromArray(webSocketConnection, capturedImageSubscribingClients)
 	});
 
 });
 
 
-function sendMessageToServer(thisContent, thisMessage) {  
-	fetch(`http://localhost:${pythonFlaskServerPortNumber}/`, {
+// function sendMessageToServer(thisContent, thisMessage) {  
+// 	fetch(`http://localhost:${pythonFlaskServerPortNumber}/`, {
+// 			method: 'post',
+// 			body:    JSON.stringify({content: thisContent, message: thisMessage}),
+// 			headers: { 'Content-Type': 'application/json' },
+// 		})
+// 		.then(res => res.json())
+// 		.then(json => console.log(json));
+// }
+
+async function sendMessageToServer(thisContent, thisMessage) {  
+	let result = await fetch(`http://localhost:${pythonFlaskServerPortNumber}/`, {
 			method: 'post',
 			body:    JSON.stringify({content: thisContent, message: thisMessage}),
 			headers: { 'Content-Type': 'application/json' },
 		})
-		.then(res => res.json())
-		.then(json => console.log(json));
+	
+	return result.json()
 }
 
 app.use(cors())
