@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+html {
+    /* background-color: rgb(83, 83, 83); */
+    /* background-color: white; */
+    color: rgb(0, 0, 0);
+    display:block;
+    box-sizing: border-box;
+}
+
+body {
+    overflow-y: scroll;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+body::-webkit-scrollbar {
+    display: none;
+}
+
+img {
+    max-width: 100%;
+}
+
+@font-face {
+    font-family: "Animeace2";
+    src: url("animeace2_reg.ttf");
+}
+
+#translatedText {
+    font-size: 16px; 
+    font-family:Animeace2;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    color: rgb(0, 0, 0); 
+    /* text-shadow:   0px -0.75px 0 #000, 0px -0.75px 0 #000, 0px  0.75px 0 #000, 0px  0.75px 0 #000, -0.75px  0px 0 #000, 0.75px  0px 0 #000, -0.75px  0px 0 #000, 0.75px  0px 0 #000, -0.75px -0.75px 0 #000, 0.75px -0.75px 0 #000, -0.75px  0.75px 0 #000, 0.75px  0.75px 0 #000, -0.75px  2.25px 0 #000, 0px  2.25px 0 #000, 0.7px  2.25px 0 #000, 0 2.375px 0.125px rgba(0,0,0,.1), 0 0 0.75px rgba(0,0,0,.1), 0 0.75px 0.375px rgba(0,0,0,.3), 0 1.5px 0.75px rgba(0,0,0,.2), 0 2.25px 2.25px rgba(0,0,0,.25), 0 3px 3px rgba(0,0,0,.2), 0 4.5px 4.5px rgba(0,0,0,.15); */
+}
+
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+</style>
+</head>
+<body style="-webkit-app-region: drag" class="unselectable">
+<!-- <input id="colorPicker" type="color" value="#ffff00"> -->
+
+<div id="content">
+    <h3 id="translatedText">You can change this window setting by opening and edit the translationWindowSettings.json file with Notepad</h3>
+    <h4 id="extractedText">Bonus: if you like to read raw Japanese mangas. Try out my Manga Rikai OCR program. It can handle multiple pages at once</h4>
+    <h4 id="extraNote">TAB or Backtick for translate button shortcut, Note: You can change/set the shortcut buttons for crop and translate buttons in the folder</h4>
+    
+    <img id="imageHolder">
+</div>
+
+
+<script src="translationWindow.js"></script>
+</body>
+</html>
