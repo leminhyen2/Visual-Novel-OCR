@@ -1,0 +1,10 @@
+{
+    "translateButton": {
+        "keycode": 15,
+        "rawcode": 9
+    },
+    "cropButton": {
+        "keycode": "",
+        "rawcode": ""
+    }
+}

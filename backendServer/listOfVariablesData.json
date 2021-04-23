@@ -1,6 +1,7 @@
 {
     "HTTPserverPortNumber": 8676,
     "websocketServerPortNumber": 9676,
-    "pythonFlaskServerPortNumber": 7676
+    "pythonFlaskServerPortNumber": 7676,
+    "DeepLwebsocketServerPortNumber": 15367
 }
 
