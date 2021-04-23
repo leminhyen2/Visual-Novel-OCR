@@ -1,0 +1,32 @@
+Quick Setup:
+https://www.youtube.com/watch?v=cjGRenGpE3s
+
+Demo Video (this is where I upload updates' links): 
+https://www.youtube.com/watch?v=AdLwcU03230
+
+Github link:
+https://github.com/leminhyen2/Visual-Novel-OCR
+
+Discord link (for supports and beta trial):
+https://discord.com/invite/XFbWSjMHJh
+
+Patreon link:
+https://www.patreon.com/mingshiba
+
+Supplement guide to translation aggregator (I already installed Edict2 for you):
+https://amaenboda.wordpress.com/tag/how-to-use-translation-aggregator/
+
+Shout-out to:
+Textractor and VNR for making me believe reading Japanese VN is even possible in the first place
+Capture2Text for that one morning experiment that led to creation of Visual Novel OCR
+Translation Aggregator devs for the great program that I am bundling with VNO
+bimbmsm for your great help in translation window UI
+russianwolf766 for the the suggestion to add translation feature, and your effort during weekend on the three demo videos 
+TheoGravity for my first received PR on Github, brief lesson on squash merge and of course, your direct contribution to color setting window
+IIeca for patiently working with me to fix font recognition issues on retro games
+IIynir for being the unofficial tester of VNO and motivated me to add support to vertical text, and implement the crop feature.
+Enthusiastic members from the Discord group for the energy 
+r/visual novel community for being very welcoming to Visual Novel OCR
+
+
+  
