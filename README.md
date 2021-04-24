@@ -1,5 +1,3 @@
-TEST TEST TEST TEST TEST
-
 Want to help out? 
 Need tech-support?
 Join our discord at https://discord.com/invite/XFbWSjMHJh
