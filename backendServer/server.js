@@ -52,6 +52,7 @@ ioHook.on('keydown', keyboardEvent => {
 });
 
 // Register and start hook
+// test comment
 ioHook.start();
 
 function checkIfTranslateButtonShortcut(keyboardEvent) {
