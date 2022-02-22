@@ -1,3 +1,4 @@
+THE OFFICIAL DOWNLOAD LINK FOR THE PROGRAM IS ON THE YOUTUBE VIDEO DESCRIPTION (NOT IN THIS GITHUB REPO)
 Want to help out? 
 Need tech-support?
 Join our discord at https://discord.com/invite/XFbWSjMHJh
